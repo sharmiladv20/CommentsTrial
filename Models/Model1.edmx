@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CommentSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblChildComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="CommentMessage" Type="varchar" MaxLength="300" />
+          <Property Name="CommentDate" Type="date" />
+          <Property Name="ParentCommentID" Type="int" />
+        </EntityType>
+        <EntityType Name="tblParentComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="CommentMessage" Type="varchar" MaxLength="300" />
+          <Property Name="CommentDate" Type="date" />
+          <Property Name="PostID" Type="int" />
+        </EntityType>
+        <EntityType Name="tblPosts">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="varchar" MaxLength="50" />
+          <Property Name="PostedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK__tblChildC__Paren__3C69FB99">
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="0..1" />
+          <End Role="tblChildComment" Type="Self.tblChildComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParentComment">
+              <PropertyRef Name="CommentID" />
+            </Principal>
+            <Dependent Role="tblChildComment">
+              <PropertyRef Name="ParentCommentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblChildC__Usern__3D5E1FD2">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblChildComment" Type="Self.tblChildComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="tblChildComment">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblParent__Usern__398D8EEE">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="tblParentComment">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblParentComment_tblPosts">
+          <End Role="tblPosts" Type="Self.tblPosts" Multiplicity="0..1" />
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="tblParentComment">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPosts_tblPosts">
+          <End Role="tblPosts" Type="Self.tblPosts" Multiplicity="1" />
+          <End Role="tblPosts1" Type="Self.tblPosts" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="tblPosts1">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CommentSystemModelStoreContainer">
+          <EntitySet Name="tblChildComment" EntityType="Self.tblChildComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblParentComment" EntityType="Self.tblParentComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPosts" EntityType="Self.tblPosts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tblChildC__Paren__3C69FB99" Association="Self.FK__tblChildC__Paren__3C69FB99">
+            <End Role="tblParentComment" EntitySet="tblParentComment" />
+            <End Role="tblChildComment" EntitySet="tblChildComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblChildC__Usern__3D5E1FD2" Association="Self.FK__tblChildC__Usern__3D5E1FD2">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblChildComment" EntitySet="tblChildComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblParent__Usern__398D8EEE" Association="Self.FK__tblParent__Usern__398D8EEE">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblParentComment" EntitySet="tblParentComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblParentComment_tblPosts" Association="Self.FK_tblParentComment_tblPosts">
+            <End Role="tblPosts" EntitySet="tblPosts" />
+            <End Role="tblParentComment" EntitySet="tblParentComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPosts_tblPosts" Association="Self.FK_tblPosts_tblPosts">
+            <End Role="tblPosts" EntitySet="tblPosts" />
+            <End Role="tblPosts1" EntitySet="tblPosts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CommentSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblChildComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CommentMessage" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CommentDate" Type="DateTime" Precision="0" />
+          <Property Name="ParentCommentID" Type="Int32" />
+          <NavigationProperty Name="tblParentComment" Relationship="Self.FK__tblChildC__Paren__3C69FB99" FromRole="tblChildComment" ToRole="tblParentComment" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblChildC__Usern__3D5E1FD2" FromRole="tblChildComment" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblParentComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CommentMessage" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="CommentDate" Type="DateTime" Precision="0" />
+          <Property Name="PostID" Type="Int32" />
+          <NavigationProperty Name="tblChildComments" Relationship="Self.FK__tblChildC__Paren__3C69FB99" FromRole="tblParentComment" ToRole="tblChildComment" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblParent__Usern__398D8EEE" FromRole="tblParentComment" ToRole="tblUser" />
+          <NavigationProperty Name="tblPost" Relationship="Self.FK_tblParentComment_tblPosts" FromRole="tblParentComment" ToRole="tblPosts" />
+        </EntityType>
+        <EntityType Name="tblPost">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblParentComments" Relationship="Self.FK_tblParentComment_tblPosts" FromRole="tblPosts" ToRole="tblParentComment" />
+          <NavigationProperty Name="tblPosts1" Relationship="Self.FK_tblPosts_tblPosts" FromRole="tblPosts" ToRole="tblPosts1" />
+          <NavigationProperty Name="tblPost1" Relationship="Self.FK_tblPosts_tblPosts" FromRole="tblPosts1" ToRole="tblPosts" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblChildComments" Relationship="Self.FK__tblChildC__Usern__3D5E1FD2" FromRole="tblUser" ToRole="tblChildComment" />
+          <NavigationProperty Name="tblParentComments" Relationship="Self.FK__tblParent__Usern__398D8EEE" FromRole="tblUser" ToRole="tblParentComment" />
+        </EntityType>
+        <Association Name="FK__tblChildC__Paren__3C69FB99">
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="0..1" />
+          <End Role="tblChildComment" Type="Self.tblChildComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParentComment">
+              <PropertyRef Name="CommentID" />
+            </Principal>
+            <Dependent Role="tblChildComment">
+              <PropertyRef Name="ParentCommentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblChildC__Usern__3D5E1FD2">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblChildComment" Type="Self.tblChildComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="tblChildComment">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblParent__Usern__398D8EEE">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="tblParentComment">
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblParentComment_tblPosts">
+          <End Role="tblPosts" Type="Self.tblPost" Multiplicity="0..1" />
+          <End Role="tblParentComment" Type="Self.tblParentComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="tblParentComment">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPosts_tblPosts">
+          <End Role="tblPosts" Type="Self.tblPost" Multiplicity="1" />
+          <End Role="tblPosts1" Type="Self.tblPost" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblPosts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="tblPosts1">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CommentSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblChildComments" EntityType="Self.tblChildComment" />
+          <EntitySet Name="tblParentComments" EntityType="Self.tblParentComment" />
+          <EntitySet Name="tblPosts" EntityType="Self.tblPost" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="FK__tblChildC__Paren__3C69FB99" Association="Self.FK__tblChildC__Paren__3C69FB99">
+            <End Role="tblParentComment" EntitySet="tblParentComments" />
+            <End Role="tblChildComment" EntitySet="tblChildComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblChildC__Usern__3D5E1FD2" Association="Self.FK__tblChildC__Usern__3D5E1FD2">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblChildComment" EntitySet="tblChildComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblParent__Usern__398D8EEE" Association="Self.FK__tblParent__Usern__398D8EEE">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblParentComment" EntitySet="tblParentComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblParentComment_tblPosts" Association="Self.FK_tblParentComment_tblPosts">
+            <End Role="tblPosts" EntitySet="tblPosts" />
+            <End Role="tblParentComment" EntitySet="tblParentComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPosts_tblPosts" Association="Self.FK_tblPosts_tblPosts">
+            <End Role="tblPosts" EntitySet="tblPosts" />
+            <End Role="tblPosts1" EntitySet="tblPosts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CommentSystemModelStoreContainer" CdmEntityContainer="CommentSystemEntities">
+          <EntitySetMapping Name="tblChildComments">
+            <EntityTypeMapping TypeName="CommentSystemModel.tblChildComment">
+              <MappingFragment StoreEntitySet="tblChildComment">
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="CommentMessage" ColumnName="CommentMessage" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="ParentCommentID" ColumnName="ParentCommentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblParentComments">
+            <EntityTypeMapping TypeName="CommentSystemModel.tblParentComment">
+              <MappingFragment StoreEntitySet="tblParentComment">
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="CommentMessage" ColumnName="CommentMessage" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPosts">
+            <EntityTypeMapping TypeName="CommentSystemModel.tblPost">
+              <MappingFragment StoreEntitySet="tblPosts">
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="PostedDate" ColumnName="PostedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="CommentSystemModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
